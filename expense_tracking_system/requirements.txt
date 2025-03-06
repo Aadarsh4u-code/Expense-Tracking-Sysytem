@@ -1,0 +1,15 @@
+ipykernel
+pandas
+numpy
+pydantic
+pytest
+matplotlib
+plotly
+seaborn
+from-root
+fastapi
+uvicorn
+python-dotenv
+streamlit
+mysql-connector-python
+-e .
