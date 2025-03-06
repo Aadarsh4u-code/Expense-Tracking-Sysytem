@@ -1,5 +1,6 @@
 import sys
-from logger import logging
+from expense_tracking_system.logger import logging
+
 
 def error_message_details(error_message: str, error_detail_obj: sys) -> str:
     '''

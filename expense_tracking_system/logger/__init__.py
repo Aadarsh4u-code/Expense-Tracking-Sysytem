@@ -31,10 +31,10 @@ logging.basicConfig(
 logger = logging.getLogger('expense_tracking_system')
 
 # Log message with different severity levels
-# '''
+'''
 logging.debug("This is dubug message")
 logging.info("This is info message")
 logging.warning("This is warning message")
 logging.error("This is error message")
 logging.critical("This is critical message")
-# '''
+'''
