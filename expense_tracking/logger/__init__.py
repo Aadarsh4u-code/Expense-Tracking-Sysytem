@@ -21,15 +21,17 @@ logging.basicConfig(
     # filename=logs_file_path,
     # filemode='w',
     level=logging.DEBUG,
-    format="[ %(asctime)s ] %(lineno)d %(name)s - %(levelname)s - %(message)s",
+    format="[ %(asctime)s ] %(filename)s:%(lineno)d %(name)s - %(levelname)s - %(message)s",
+    # format="[ %(asctime)s ] %(lineno)d %(name)s - %(levelname)s - %(message)s",
     handlers=[
         logging.FileHandler(logs_file_path), # Output logs to the file 
         logging.StreamHandler(sys.stdout) # Output logs in the terminal/console
     ]
 )
 
-# Logging with Multiple Loggers
-logger = logging.getLogger('expense_tracking')
+
+# # Logging with Multiple Loggers
+# logger = logging.getLogger('expense_tracking')
 
 # Log message with different severity levels
 '''
