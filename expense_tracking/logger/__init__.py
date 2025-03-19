@@ -6,7 +6,11 @@ from datetime import datetime
 # Format to how log file is created
 log_file_name = f"{datetime.now().strftime('%d_%m_%Y_%H_%M_%S')}.log"
 
-log_dir = 'logs'
+# Ensure logs are saved in the root directory
+root_dir = os.path.dirname(os.path.abspath(__file__))  # Get the directory where this script is located
+log_dir = os.path.join(root_dir, "logs")  # Ensure logs folder is in the root directory
+logs_file_path = os.path.join(log_dir, log_file_name)
+# log_dir = 'logs'
 
 # Path for a log file
 logs_file_path = os.path.join(os.getcwd(), log_dir, log_file_name)
@@ -31,7 +35,7 @@ logging.basicConfig(
 
 
 # # Logging with Multiple Loggers
-# logger = logging.getLogger('expense_tracking')
+logger = logging.getLogger('logger')
 
 # Log message with different severity levels
 '''

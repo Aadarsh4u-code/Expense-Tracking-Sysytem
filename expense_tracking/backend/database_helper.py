@@ -5,7 +5,7 @@ import sys
 
 # Get the file name
 # logger = logging.getLogger('database_helper')
-logger = logging.getLogger(f'{sys.argv[0]}')
+logger = logging.getLogger('database_helper')
 
 @contextmanager
 def get_db_cursor(commit = False):
@@ -47,7 +47,7 @@ def fetch_expenses_for_date(expenses_date):
 def fetch_expenses_for_date_between(expenses_from_date, expenses_to_date):
     logging.info(f"{fetch_expenses_for_date_between.__name__} called to fetch expenses from {expenses_from_date} to {expenses_to_date} date.")
     with get_db_cursor() as cursor:
-        cursor.execute("SELECT * FROM expenses WHERE expense_date BETWEEN %s AND %s ORDER BY expense_date",(expenses_from_date, expenses_to_date))
+        cursor.execute("SELECT * FROM expenses WHERE expense_date BETWEEN %s AND %s ORDER BY expense_date DESC",(expenses_from_date, expenses_to_date))
         data = cursor.fetchall()
         return data
 
@@ -62,16 +62,17 @@ def insert_expenses(expense_date, amount, category, notes):
         else:
             print("Error: Data not inserted.")
 
-def delete_expenses_item(id):
-    logging.info(f"{delete_expenses_item.__name__} called to delete expense with id: {id}.")
-    with get_db_cursor(commit = True) as cursor:
-        cursor.execute("DELETE FROM expenses WHERE id = %s", (id,))
+def delete_expenses_item(ids):
+    logging.info(f"{delete_expenses_item.__name__} called to delete expense with id: {ids}.")
+    for id in ids:
+        with get_db_cursor(commit = True) as cursor:
+            cursor.execute("DELETE FROM expenses WHERE id = %s", (id,))
 
-        # Verify if data is inserted and print success message
-        if cursor.rowcount > 0:  # rowcount tells how many rows were affected
-            print("Success! Data deleted from database.")
-        else:
-            print("Error: Data not deleted.")
+            # Verify if data is inserted and print success message
+            if cursor.rowcount > 0:  # rowcount tells how many rows were affected
+                print("Success! Data deleted from database.")
+            else:
+                print("Error: Data not deleted.")
 
 def delete_expenses_for_date(expense_date):
     logging.info(f"{delete_expenses_for_date.__name__} called to delete expense for date: {expense_date}.")
