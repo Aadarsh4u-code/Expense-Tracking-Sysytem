@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Query
+from fastapi.responses import JSONResponse
 from datetime import date
 from typing import List, Optional
 from pydantic import BaseModel
@@ -36,7 +37,7 @@ def get_expenses_for_date_between(from_date: date = Query(..., description="Star
 def add_expenses(expense_date: date, expenses: List[AddExpense]):
     for expense in expenses:
         database_helper.insert_expenses(expense_date, expense.amount, expense.category, expense.notes)
-    return {"message": "Expenses added sucessfully"}
+    return JSONResponse(status_code=201, content={"message": "Expense added successfully!"})
 
 @app.post("/expense/delete/")
 def delete_expenses(id: List[int] = Query(..., description="list of id")):
