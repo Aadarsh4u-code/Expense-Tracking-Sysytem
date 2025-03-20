@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 API_URL = os.getenv("BASE_URL")
 
-def add_expense():
+def add_expens_ui():
     st.header("Add Expenses")
     with st.form(key = "add_form", clear_on_submit=True, border=True):
         selected_date = st.date_input(label="Select Date", value=datetime.today().date())
@@ -43,6 +43,7 @@ def add_expense():
             response = requests.post(f"{API_URL}/expense/{selected_date}", json=expense_data)
             if response.status_code == 201:
                 st.success(response.json()['message']) 
+                st.rerun()
             else:
                 st.error(response.json()['message'])
             

@@ -17,9 +17,9 @@ def select_date_range():
         two_week_back = today_date - timedelta(weeks=2)
 
         with col1:
-            from_date = st.date_input(label="From", value=two_week_back)
+            from_date = st.date_input(label="From", value=two_week_back, key="from_date_")
         with col2:
-            to_date = st.date_input(label="To", value=today_date)
+            to_date = st.date_input(label="To", value=today_date, key="to_date_")
     return from_date, to_date
 
 
@@ -46,7 +46,7 @@ def data_table(expense_data):
     event = st.dataframe(
         st.session_state.df,
         hide_index=True,
-        key="data",
+        key="exp_data",
         on_select="rerun",
         selection_mode="multi-row", # Only allow row selection
         column_order=["expense_date","amount","category","notes"],
