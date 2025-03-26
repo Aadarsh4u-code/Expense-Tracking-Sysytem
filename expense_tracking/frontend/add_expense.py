@@ -12,7 +12,7 @@ def add_expens_ui():
     st.header("Add Expenses")
     with st.form(key = "add_form", clear_on_submit=True, border=True):
         selected_date = st.date_input(label="Select Date", value=datetime.today().date())
-        categories = ["Rent", "Food", "Shopping", "Grocery", "Transportation", "Entertainment", "Other"]
+        categories = ["Rent", "Food", "Bills", "Shopping", "Grocery", "Transport", "Entertainment", "Other"]
         col1, col2, col3 = st.columns(3)
         with col1:
             st.text("Amount")

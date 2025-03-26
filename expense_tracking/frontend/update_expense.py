@@ -20,7 +20,6 @@ def update_expense_ui():
     response = requests.get(f"{API_URL}/expense/{str(selected_date)}")
     if response.status_code == 200:
         data = response.json()
-        print('data',data)
         if len(data) > 0:
             selected_rows = data_table(data)
             st.session_state["selected_rows"] = selected_rows  # Store selection

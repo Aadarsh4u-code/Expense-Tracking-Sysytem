@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import JSONResponse
 from datetime import date
 from typing import List, Optional
@@ -47,6 +47,8 @@ def get_expense_by_id(id: int):
 def get_expenses_for_date_between(from_date: date = Query(..., description="Start date (YYYY-MM-DD)"),
                                 to_date: date = Query(..., description="End date (YYYY-MM-DD)")):
     expense = database_helper.fetch_expenses_for_date_between(from_date, to_date)
+    if expense is None:
+        raise HTTPException(status_code=500, detail="Failed to retrive expense data from the database.")
     return expense
 
 # Add expenses for given date.
@@ -67,4 +69,5 @@ def update_expense(expense_id: int, expenses: UpdateExpense):
     logging.info(f"Updating expense with ID {expense_id}")
     database_helper.update_expenses_for_id(expense_id, expenses.expense_date, expenses.amount, expenses.category, expenses.notes)
     return JSONResponse(status_code=202, content={"message": "Expense updated successfully!"})
+
 

@@ -12,4 +12,5 @@ uvicorn
 python-dotenv
 streamlit
 mysql-connector-python
+wordcloud
 -e .
