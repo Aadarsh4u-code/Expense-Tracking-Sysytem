@@ -30,6 +30,14 @@ class UpdateExpense(BaseModel):
 # Creating an instance of FastAPI
 app = FastAPI()
 
+# Get all expenses.
+@app.get("/expensesall", response_model=List[GetExpense])
+def get_all_expenses_summary():
+    expense = database_helper.fetch_all_record()
+    if expense is None:
+        raise HTTPException(status_code=500, detail="Failed to retrive expense data from the database.")
+    return expense
+
 # Get expenses for given date.
 @app.get("/expense/{expense_date}", response_model=List[GetExpense])
 def get_expenses_for_date(expense_date: date, ):
