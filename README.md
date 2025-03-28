@@ -2,6 +2,30 @@
 
 This project is an expense management system that consists of a Streamlit frontend application and a FastAPI backend server connected with MySql Database.
 
+
+# Screenshot of UI
+
+Dashboard For Expenses
+![HomepageUI](./screenshot/Expense%20Tracking%20System%20Dashboard%20-1.png)
+![HomepageUI](./screenshot/Expense%20Tracking%20System%20Dashboard%20-2.png)
+![HomepageUI](./screenshot/Expense%20Tracking%20System%20Dashboard%20-3.png)
+
+Expenses List and Delete
+![HomepageUI](./screenshot/Expenses%20List:%20Delete.png)
+
+Add Expenses
+![HomepageUI](./screenshot/Add%20Expenses.png)
+
+Update Expenses
+![HomepageUI](./screenshot/Update%20Expenses.png)
+
+PostMan API Test
+![HomepageUI](./screenshot/GET%20expense%20between%20date%20range.png)
+![HomepageUI](./screenshot/Delete%20expense%20.png)
+![HomepageUI](./screenshot/postman-%20POST%20request.png)
+
+
+
 ## Project Structure
 
 - **frontend/**: Contains the Streamlit application code.
