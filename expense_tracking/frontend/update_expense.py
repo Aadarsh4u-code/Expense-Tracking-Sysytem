@@ -21,13 +21,18 @@ def update_expense_ui():
     if response.status_code == 200:
         data = response.json()
         if len(data) > 0:
-            selected_rows = data_table(data)
+            # **Fix: Always update session state with new data**
+            st.session_state["to_update_df"] = pd.DataFrame(data)
+            selected_rows = data_table(st.session_state["to_update_df"])  # Call without passing old data
             st.session_state["selected_rows"] = selected_rows  # Store selection
+
         else: 
             st.error("No expense for this date")
+            st.session_state["to_update_df"] = pd.DataFrame()  # Reset DataFrame
             st.session_state["selected_rows"] = []
     else:
         st.error("Failed to retrieve expenses.")
+        st.session_state["to_update_df"] = pd.DataFrame()  # Reset DataFrame
         st.session_state["selected_rows"] = []
 
     # Show update form only if a row is selected
@@ -36,13 +41,12 @@ def update_expense_ui():
 
 def data_table(expense_data):
 
-    # Initialize DataFrame in session state if not present
-    if "to_update_df" not in st.session_state:
-        st.session_state.to_update_df = pd.DataFrame(expense_data)
+    if expense_data.empty:
+        return []  # Return empty selection if no data
 
     # Display the table with row selection
     event = st.dataframe(
-        st.session_state.to_update_df,
+        expense_data,
         hide_index=True,
         key="to_update_df_data",
         on_select="rerun",
@@ -61,9 +65,9 @@ def show_update_form():
 
     # Get selected row data
     selected_row_index = st.session_state["selected_rows"][0]  # Get first selected row
-    data_to_update = st.session_state.to_update_df.iloc[selected_row_index].to_dict()
+    data_to_update = st.session_state["to_update_df"].iloc[selected_row_index].to_dict()
 
-    categories = ["Rent", "Food", "Shopping", "Grocery", "Transportation", "Entertainment", "Other"]
+    categories = ["Rent", "Food", "Shopping", "Grocery", "Transport", "Entertainment", "Other"]
 
     with st.form(key="update_form", clear_on_submit=True, border=True):
         date_input = st.date_input("Expense Date", value=data_to_update['expense_date'], key="update_expense_date")
@@ -88,10 +92,14 @@ def show_update_form():
             if response.status_code == 202:
                 st.success("Expense updated successfully!")
 
-                # Clear selection and close form
+                # Update the DataFrame in session state
+                df_copy = st.session_state["to_update_df"].copy()
+                df_copy.iloc[selected_row_index] = updated_data  # Update row in new DataFrame
+                st.session_state["to_update_df"] = df_copy  # Reassign DataFrame to trigger UI update
+
+                # Clear selection and rerun UI
                 st.session_state["selected_rows"] = []
-                st.session_state.to_update_df.iloc[selected_row_index] = updated_data  # Update local DF
-                st.rerun()  # Refresh the UI
+                st.rerun()
             else:
                 st.error("Failed to update expense.")
 

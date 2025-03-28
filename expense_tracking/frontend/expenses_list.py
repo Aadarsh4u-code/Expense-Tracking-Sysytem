@@ -17,9 +17,9 @@ def select_date_range():
         two_week_back = today_date - timedelta(weeks=2)
 
         with col1:
-            from_date = st.date_input(label="From", value=two_week_back, key="from_date_")
+            from_date = st.date_input(label="From", value=two_week_back, key="from_date_exp")
         with col2:
-            to_date = st.date_input(label="To", value=today_date, key="to_date_")
+            to_date = st.date_input(label="To", value=today_date, key="to_date_exp")
     return from_date, to_date
 
 
@@ -30,21 +30,31 @@ def expenses_list_ui():
     if response.status_code == 200:
         data = response.json()
         if len(data) > 0:
-            data_table(data)
+            # Update session state with the new data
+            st.session_state["df"] = pd.DataFrame(data)
+            # data_table(data)
         else: 
             st.error("No data for this date range")
+            st.session_state["df"] = pd.DataFrame()  # Empty DataFrame to clear old data
     else:
         st.error("Failed to retrieve expenses.")
-        
-def data_table(expense_data):
+        st.session_state["df"] = pd.DataFrame()  # Reset to empty DataFrame
+
+    # Display updated table
+    data_table()
+
+def data_table():
 
         # Initialize DataFrame in session state if not present
-    if "df" not in st.session_state:
-        st.session_state.df = pd.DataFrame(expense_data)
+    if "df" not in st.session_state or st.session_state["df"].empty:
+        st.write("No expenses data to display.")
+        return
+    
+    df = st.session_state["df"]
 
     # Display the table with row selection
     event = st.dataframe(
-        st.session_state.df,
+        df,
         hide_index=True,
         key="exp_data",
         on_select="rerun",
